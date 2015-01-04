@@ -1,0 +1,1 @@
+Simple game "snake". Just for fun.
