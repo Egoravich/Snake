@@ -1,3 +1,4 @@
+package snake;
 
 public class SnakeSegment implements ISnakeSegment {
     private SegmentType type;
@@ -16,6 +17,11 @@ public class SnakeSegment implements ISnakeSegment {
     @Override
     public SegmentType getType() {
         return type;
+    }
+
+    @Override
+    public void setType(SegmentType type) {
+        this.type = type;
     }
 
     @Override

@@ -1,3 +1,4 @@
+package snake;
 
 public interface ISnakeSegment {
     enum SegmentType {
@@ -7,6 +8,7 @@ public interface ISnakeSegment {
     }
 
     public SegmentType getType();
+    public void setType(SegmentType type);
 
     public int getX();
     public int getY();

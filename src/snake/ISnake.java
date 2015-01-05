@@ -1,3 +1,5 @@
+package snake;
+
 import java.util.ArrayList;
 
 public interface ISnake {
@@ -9,9 +11,13 @@ public interface ISnake {
     }
 
     public void addSegment();
+    public void addSegment(ISnakeSegment segment);
     public void move();
     public SnakeDirection getDirection();
-    public void setDirection(SnakeDirection direction);
+
+    public void turnRight();
+    public void turnLeft();
 
     public ArrayList<ISnakeSegment> getSegments();
+    public ISnakeSegment getTail();
 }

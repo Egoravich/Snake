@@ -1,3 +1,5 @@
+package snake;
+
 import java.util.ArrayList;
 
 public class Snake implements ISnake {
@@ -6,7 +8,7 @@ public class Snake implements ISnake {
     private final int HEAD_POSITION = 0;
 
     public Snake(SnakeDirection direction, ISnakeSegment head, ISnakeSegment body, ISnakeSegment tail) {
-        this.setDirection(direction);
+        this.direction = direction;
         this.snake.add(head);
         this.snake.add(body);
         this.snake.add(tail);
@@ -14,6 +16,11 @@ public class Snake implements ISnake {
 
     public Snake(ISnakeSegment head, ISnakeSegment body, ISnakeSegment tail) {
         this(SnakeDirection.UP, head, body, tail);
+    }
+
+    @Override
+    public void addSegment(ISnakeSegment segment) {
+        this.snake.add(segment);
     }
 
     @Override
@@ -55,17 +62,46 @@ public class Snake implements ISnake {
     }
 
     @Override
+    public void turnRight() {
+        turnTo(true);
+    }
+
+    @Override
+    public void turnLeft() {
+        turnTo(false);
+    }
+
+    private void turnTo(boolean to_right) {
+        ArrayList<SnakeDirection> directions = new ArrayList<>();
+        directions.add(SnakeDirection.UP); directions.add(SnakeDirection.RIGHT);
+        directions.add(SnakeDirection.DOWN); directions.add(SnakeDirection.LEFT);
+        int directionIndex = directions.indexOf(getDirection());
+
+        if (to_right) {
+            directionIndex++;
+        }
+        else {
+            directionIndex--;
+            directionIndex += directions.size();
+        }
+
+        directionIndex %= directions.size();
+
+        this.direction = directions.get(directionIndex);
+    }
+
+    @Override
     public SnakeDirection getDirection() {
         return direction;
     }
 
     @Override
-    public void setDirection(SnakeDirection direction) {
-        this.direction = direction;
+    public ArrayList<ISnakeSegment> getSegments() {
+        return snake;
     }
 
     @Override
-    public ArrayList<ISnakeSegment> getSegments() {
-        return snake;
+    public ISnakeSegment getTail() {
+        return getSegments().get(getSegments().size() - 1);
     }
 }
