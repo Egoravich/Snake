@@ -1,27 +1,55 @@
 package snake;
 
 public class SnakeSegment implements ISnakeSegment {
-    private SegmentType type;
-    private int x, y = 0;
+    private Type type;
+    private Direction directionFrom;
+    private Direction directionTo;
+    private int x, y = DEFAULT_XY;
 
-    public SnakeSegment(SegmentType type, int x, int y) {
+    public SnakeSegment(Type type, Direction directionFrom, Direction directionTo, int x, int y) {
         this.type = type;
+        this.directionFrom = directionFrom;
+        this.directionTo = directionTo;
         this.x = x;
         this.y = y;
     }
 
-    public SnakeSegment(int x, int y) {
-        this(SegmentType.BODY, x, y);
+    public SnakeSegment(Type type, Direction direction, int x, int y) {
+        this(type, direction, direction, x, y);
+    }
+
+    public SnakeSegment(Direction direction, int x, int y) {
+        this(DEFAULT_TYPE, direction, direction, x, y);
     }
 
     @Override
-    public SegmentType getType() {
+    public Type getType() {
         return type;
     }
 
     @Override
-    public void setType(SegmentType type) {
+    public void setType(Type type) {
         this.type = type;
+    }
+
+    @Override
+    public Direction getDirectionFrom() {
+        return directionFrom;
+    }
+
+    @Override
+    public void setDirectionFrom(Direction directionFrom) {
+        this.directionFrom = directionFrom;
+    }
+
+    @Override
+    public Direction getDirectionTo() {
+        return directionTo;
+    }
+
+    @Override
+    public void setDirectionTo(Direction directionTo) {
+        this.directionTo = directionTo;
     }
 
     @Override

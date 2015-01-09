@@ -14,7 +14,11 @@ public class SnakeTest {
 
     @Test
     public void testGetSegments() throws Exception {
-        ISnakeSegment segments[] = {new SnakeSegment(5, 5), new SnakeSegment(5, 6), new SnakeSegment(5, 7)};
+        ISnakeSegment segments[] = {
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 5),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 6),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 7)
+        };
 
         ISnake snake;
         snake = new Snake(segments[0], segments[1], segments[2]);
@@ -24,15 +28,24 @@ public class SnakeTest {
 
     @Test
     public void testGetTail() throws Exception {
-        ISnakeSegment tail = new SnakeSegment(5, 7);
-        ISnake snake = new Snake(new SnakeSegment(5, 5), new SnakeSegment(5, 6), tail);
+        ISnakeSegment tail = new SnakeSegment(ISnakeSegment.Direction.UP, 5, 7);
+        ISnake snake = new Snake(
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 5),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 6),
+                tail
+        );
 
         assertEquals(tail, snake.getTail());
     }
 
     @Test
     public void testAddSegment() throws Exception {
-        ISnake snake = new Snake(new SnakeSegment(5, 5), new SnakeSegment(5, 6), new SnakeSegment(5, 7));
+        ISnake snake = new Snake(
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 5),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 6),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 7)
+        );
+
         ISnakeSegment tail = snake.getTail();
         int snakeLenght = snake.getSegments().size();
 
@@ -48,59 +61,57 @@ public class SnakeTest {
     @Test
     public void testGetDirection() throws Exception {
         ISnake snake;
-        ISnake.SnakeDirection result;
+        ISnakeSegment.Direction result;
 
-        result = ISnake.SnakeDirection.LEFT;
-        snake = new Snake(result, new SnakeSegment(5, 5), new SnakeSegment(5, 6), new SnakeSegment(5, 7));
-        assertEquals(snake.getDirection(), result);
-
-        result = ISnake.SnakeDirection.UP;
-        snake = new Snake(result, new SnakeSegment(5, 5), new SnakeSegment(5, 6), new SnakeSegment(5, 7));
+        result = ISnakeSegment.Direction.LEFT;
+        snake = new Snake(
+                new SnakeSegment(result, 5, 5),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 6),
+                new SnakeSegment(ISnakeSegment.Direction.RIGHT, 5, 7)
+        );
         assertEquals(snake.getDirection(), result);
     }
 
     @Test
     public void testTurnRight() throws Exception {
         ISnake snake = new Snake(
-                ISnake.SnakeDirection.UP,
-                new SnakeSegment(5, 5),
-                new SnakeSegment(5, 6),
-                new SnakeSegment(5, 7)
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 5),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 6),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 7)
         );
 
         snake.turnRight();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.RIGHT);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.RIGHT);
 
         snake.turnRight();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.DOWN);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.DOWN);
 
         snake.turnRight();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.LEFT);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.LEFT);
 
         snake.turnRight();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.UP);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.UP);
     }
 
     @Test
     public void testTurnLeft() throws Exception {
         ISnake snake = new Snake(
-                ISnake.SnakeDirection.UP,
-                new SnakeSegment(5, 5),
-                new SnakeSegment(5, 6),
-                new SnakeSegment(5, 7)
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 5),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 6),
+                new SnakeSegment(ISnakeSegment.Direction.UP, 5, 7)
         );
 
         snake.turnLeft();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.LEFT);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.LEFT);
 
         snake.turnLeft();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.DOWN);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.DOWN);
 
         snake.turnLeft();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.RIGHT);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.RIGHT);
 
         snake.turnLeft();
-        assertEquals(snake.getDirection(), ISnake.SnakeDirection.UP);
+        assertEquals(snake.getDirection(), ISnakeSegment.Direction.UP);
     }
 
     @Test
@@ -109,14 +120,13 @@ public class SnakeTest {
         int y[] = {4, 3, 3, 2, 1, 1, 1, 1, 2, 3, 4, 5, 5, 5, 5, 4, 3, 3};
 
         ISnake snake = new Snake(
-                ISnake.SnakeDirection.DOWN,
-                new SnakeSegment(x[0], y[0]),
-                new SnakeSegment(x[1], y[1]),
-                new SnakeSegment(x[2], y[2])
+                new SnakeSegment(ISnakeSegment.Direction.DOWN, x[0], y[0]),
+                new SnakeSegment(ISnakeSegment.Direction.DOWN, x[1], y[1]),
+                new SnakeSegment(ISnakeSegment.Direction.DOWN, x[2], y[2])
         );
 
         for (int i = 3; i < x.length || i < y.length; i++) {
-            snake.addSegment(new SnakeSegment(x[i], y[i]));
+            snake.addSegment(new SnakeSegment(ISnakeSegment.Direction.DOWN, x[i], y[i]));
         }
 
         snake.move();
@@ -140,14 +150,13 @@ public class SnakeTest {
         final int LAST_INDEX = x.length - 1;
 
         ISnake snake = new Snake(
-                ISnake.SnakeDirection.RIGHT,
-                new SnakeSegment(x[LAST_INDEX], y[LAST_INDEX]),
-                new SnakeSegment(x[LAST_INDEX], y[LAST_INDEX]),
-                new SnakeSegment(x[LAST_INDEX], y[LAST_INDEX])
+                new SnakeSegment(ISnakeSegment.Direction.RIGHT, x[LAST_INDEX], y[LAST_INDEX]),
+                new SnakeSegment(ISnakeSegment.Direction.DOWN, x[LAST_INDEX], y[LAST_INDEX]),
+                new SnakeSegment(ISnakeSegment.Direction.DOWN, x[LAST_INDEX], y[LAST_INDEX])
         );
 
         for (int i = 3; i < x.length || i < y.length; i++) {
-            snake.addSegment(new SnakeSegment(x[0], y[0]));
+            snake.addSegment(new SnakeSegment(ISnakeSegment.Direction.DOWN, x[0], y[0]));
         }
 
         snake.move();

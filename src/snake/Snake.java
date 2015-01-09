@@ -4,29 +4,37 @@ import java.util.ArrayList;
 
 public class Snake implements ISnake {
     private ArrayList<ISnakeSegment> snake = new ArrayList<>();
-    private SnakeDirection direction;
+    /**
+     * Номер головного элемента
+     */
     private final int HEAD_POSITION = 0;
 
-    public Snake(SnakeDirection direction, ISnakeSegment head, ISnakeSegment body, ISnakeSegment tail) {
-        this.direction = direction;
+    public Snake(ISnakeSegment head, ISnakeSegment body, ISnakeSegment tail) {
+        head.setType(ISnakeSegment.Type.HEAD);
+        body.setType(ISnakeSegment.Type.BODY);
+        tail.setType(ISnakeSegment.Type.TAIL);
+
         this.snake.add(head);
         this.snake.add(body);
         this.snake.add(tail);
     }
 
-    public Snake(ISnakeSegment head, ISnakeSegment body, ISnakeSegment tail) {
-        this(SnakeDirection.UP, head, body, tail);
-    }
-
     @Override
     public void addSegment(ISnakeSegment segment) {
-        this.snake.add(segment);
+        snake.add(segment);
     }
 
     @Override
     public void addSegment() {
         ISnakeSegment tail = snake.get(snake.size() - 1);
-        this.snake.add(new SnakeSegment(tail.getX(), tail.getY()));
+        snake.add(new SnakeSegment(
+                ISnakeSegment.Type.TAIL, tail.getDirectionFrom(), tail.getDirectionTo(), tail.getX(), tail.getY()
+        ));
+    }
+
+    @Override
+    public ISnakeSegment getHead() {
+        return snake.get(HEAD_POSITION);
     }
 
     @Override
@@ -42,7 +50,21 @@ public class Snake implements ISnake {
 
             thisElem.setX(nextElem.getX());
             thisElem.setY(nextElem.getY());
+
+            // Проверка и проставление напрвления сегмента (нужно для проставления правильного спрайта)
+            thisElem.setDirectionFrom(nextElem.getDirectionFrom());
+            thisElem.setDirectionTo(nextElem.getDirectionTo());
+
+            thisElem.setType(ISnakeSegment.Type.BODY);
         }
+
+        getTail().setType(ISnakeSegment.Type.TAIL);
+        getHead().setType(ISnakeSegment.Type.HEAD);
+
+        // Логика для шейного сегмента
+        // TODO: Убрать хардкод
+        snake.get(1).setDirectionFrom(snake.get(2).getDirectionTo());
+        snake.get(1).setDirectionTo(head.getDirectionTo());
 
         // Логика для головы
         switch (getDirection()) {
@@ -59,6 +81,7 @@ public class Snake implements ISnake {
                 head.setX(head.getX() - 1);
                 break;
         }
+
     }
 
     @Override
@@ -72,27 +95,29 @@ public class Snake implements ISnake {
     }
 
     private void turnTo(boolean to_right) {
-        ArrayList<SnakeDirection> directions = new ArrayList<>();
-        directions.add(SnakeDirection.UP); directions.add(SnakeDirection.RIGHT);
-        directions.add(SnakeDirection.DOWN); directions.add(SnakeDirection.LEFT);
+        ArrayList<ISnakeSegment.Direction> directions = new ArrayList<>();
+        directions.add(ISnakeSegment.Direction.UP);
+        directions.add(ISnakeSegment.Direction.RIGHT);
+        directions.add(ISnakeSegment.Direction.DOWN);
+        directions.add(ISnakeSegment.Direction.LEFT);
         int directionIndex = directions.indexOf(getDirection());
 
         if (to_right) {
             directionIndex++;
-        }
-        else {
+        } else {
             directionIndex--;
             directionIndex += directions.size();
         }
 
         directionIndex %= directions.size();
 
-        this.direction = directions.get(directionIndex);
+        getHead().setDirectionFrom(getHead().getDirectionTo());
+        getHead().setDirectionTo(directions.get(directionIndex));
     }
 
     @Override
-    public SnakeDirection getDirection() {
-        return direction;
+    public ISnakeSegment.Direction getDirection() {
+        return getHead().getDirectionTo();
     }
 
     @Override

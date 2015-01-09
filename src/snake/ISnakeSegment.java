@@ -1,14 +1,24 @@
 package snake;
 
 public interface ISnakeSegment {
-    enum SegmentType {
-        HEAD,
-        BODY,
-        TAIL,
+    static enum Type {
+        HEAD, BODY, TAIL,
+    }
+    static enum Direction {
+        UP, RIGHT, DOWN, LEFT,
     }
 
-    public SegmentType getType();
-    public void setType(SegmentType type);
+    static final Type DEFAULT_TYPE = Type.BODY;
+    static final int DEFAULT_XY = 0;
+
+    public Type getType();
+    public void setType(Type type);
+
+    public Direction getDirectionFrom();
+    public void setDirectionFrom(Direction directionFrom);
+
+    public Direction getDirectionTo();
+    public void setDirectionTo(Direction directionTo);
 
     public int getX();
     public int getY();
