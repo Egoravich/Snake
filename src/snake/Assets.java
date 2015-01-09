@@ -43,10 +43,10 @@ public abstract class Assets {
 
     private static ISprite gameOver = new Sprite(spriteMap, 0, 192, 200, 32, 0, false, 1);
 
-    private static ISprite ground = new Sprite(spriteMap, 96, 224);
-    private static ISprite grassHide = new Sprite(spriteMap, 128, 224);
-    private static ISprite grassMedium = new Sprite(spriteMap, 160, 224);
-    private static ISprite grassFew = new Sprite(spriteMap, 192, 224);
+    private static ISprite ground = new Sprite(spriteMap, 0, 224);
+    private static ISprite grassFew = new Sprite(spriteMap, 32, 224);
+    private static ISprite grassMedium = new Sprite(spriteMap, 64, 224);
+    private static ISprite grassHide = new Sprite(spriteMap, 96, 224);
 
     /**
      * По переданному сегменту змеи возвращает его спрайт.
