@@ -38,8 +38,8 @@ public abstract class Game {
         ground = new ArrayList<>();
         IGround oneBlock;
         int rand;
-        for (int i = 0; i <= Game.getDefaultRowCount(); i++) {
-            for (int j = 0; j <= Game.getDefaultColumnCount(); j++) {
+        for (int i = 0; i < Game.getDefaultRowCount(); i++) {
+            for (int j = 0; j < Game.getDefaultColumnCount(); j++) {
                 rand = getRandom(0, 100);
                 oneBlock = new Ground();
                 oneBlock.setX(j);
@@ -85,12 +85,12 @@ public abstract class Game {
         snake.move();
 
         if (snake.getHead().getX() < 0) {
-            snake.getHead().setX(Game.getDefaultColumnCount());
-        } else if (snake.getHead().getX() > Game.getDefaultColumnCount()) {
+            snake.getHead().setX(Game.getDefaultColumnCount() - 1);
+        } else if (snake.getHead().getX() >= Game.getDefaultColumnCount()) {
             snake.getHead().setX(0);
         } else if (snake.getHead().getY() < 0) {
-            snake.getHead().setY(Game.getDefaultColumnCount());
-        } else if (snake.getHead().getY() > Game.getDefaultColumnCount()) {
+            snake.getHead().setY(Game.getDefaultRowCount() - 1);
+        } else if (snake.getHead().getY() >= Game.getDefaultRowCount()) {
             snake.getHead().setY(0);
         }
 
@@ -140,24 +140,27 @@ public abstract class Game {
         }
 
         int cellCount = Game.getDefaultColumnCount() * Game.getDefaultRowCount();
-        int position = getRandom(0, cellCount);
-
-        int foodX, foodY;
+        int position = getRandom(0, cellCount - 1);
+        int foodX, foodY = 0;
 
         boolean isBreak = false;
         for (int i = position; i < position + cellCount; i++) {
-            // TODO: Добавь деление нацело на cellCount при position > cellCount
-            foodX = position % Game.getDefaultColumnCount();
-            foodY = (position - foodX) / Game.getDefaultRowCount() + 1;
+            position = i;
+            if (position > cellCount) {
+                position %= cellCount;
+            }
 
-            for (ISnakeSegment segment : Game.getSnake().getSegments()) {
+            foodX = position % Game.getDefaultColumnCount();
+            foodY = (position - foodX) / Game.getDefaultRowCount();
+
+            for (ISnakeSegment segment : snake.getSegments()) {
                 if (segment.getX() == foodX && segment.getY() == foodY) {
-                    position++;
+                    isBreak = false;
+                    break;
                 } else {
                     food.setX(foodX);
                     food.setY(foodY);
                     isBreak = true;
-                    break;
                 }
             }
 

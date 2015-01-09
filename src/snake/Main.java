@@ -51,7 +51,7 @@ public class Main {
             public void keyReleased(KeyEvent e) {}
         });
         // TODO: хардкод
-        win.setSize(1000, 1000);
+        win.setSize(600, 600);
         win.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         win.getContentPane().add(canvas);
         win.setVisible(true);
