@@ -5,6 +5,9 @@ import java.awt.*;
 import java.util.Calendar;
 
 public class Screen extends JPanel implements IScreen {
+    private final int SCREEN_WIDTH = 32 * Game.getDefaultColumnCount();
+    private final int SCREEN_HEIGHT = 32 * Game.getDefaultRowCount();
+
     private static Screen instance = null;
     private State state;
 
@@ -26,6 +29,15 @@ public class Screen extends JPanel implements IScreen {
 
     @Override
     public void drawScreen() {
+        if (Game.isPlay()) {
+            setState(State.GAME_RUNNING);
+        } else if (Game.isPause()) {
+            setState(State.GAME_PAUSED);
+        } else if(Game.isGameOver()) {
+            setState(State.GAME_OVER);
+        } else {
+            setState(State.MAIN_MENU);
+        }
         repaint();
     }
 
@@ -33,33 +45,35 @@ public class Screen extends JPanel implements IScreen {
     public void paint(Graphics g) {
         super.paint(g);
 
-        if (Game.isPlay()) {
-            setState(State.GAME_ON);
-            drawGameOn(g);
-        }
-        if (Game.isPause()) {
-            setState(State.GAME_PAUSE);
-            drawGamePause(g);
-        } else if(Game.isGameOver()) {
-            setState(State.GAME_OVER);
-            drawGameOver(g);
-        } else {
-            setState(State.MAIN_MENU);
-            drawMainMenu(g);
+        switch (getState()) {
+            case GAME_RUNNING:
+                drawGameRunning(g);
+                break;
+            case GAME_PAUSED:
+                drawGamePaused(g);
+                break;
+            case GAME_OVER:
+                drawGameRunning(g);
+                drawGameOver(g);
+                break;
+            case MAIN_MENU:
+                drawMainMenu(g);
+                break;
         }
     }
 
     private void drawMainMenu(Graphics g) {
-
+        g.setColor(Color.gray);
+        g.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+        drawSpriteInCenter(Assets.getPressEnter(), g);
     }
-    private void drawGameOn(Graphics g) {
+
+    private void drawGameRunning(Graphics g) {
         long timeNow = getTimeNow();
-        ISprite tmp = null;
+        ISprite tmp;
+        int tmpX, tmpY;
 
         // Отрисовка сетки (земли)
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.LIGHT_GRAY);
-
         for (IGround oneBlock : Game.getGround()) {
             tmp = Assets.getGround();
             switch (oneBlock.getType()) {
@@ -73,19 +87,19 @@ public class Screen extends JPanel implements IScreen {
                     tmp = Assets.getGrassHide();
                     break;
             }
-            tmp.drawSprite(
-                    oneBlock.getX() * tmp.getOneFrameWidth(), oneBlock.getY() * tmp.getOneFrameHeight(), timeNow, g);
+            tmpX = oneBlock.getX() * getOneCellWidth();
+            tmpY = oneBlock.getY() * getOneCellHeight();
+
+            tmp.drawSprite(tmpX, tmpY, getOneCellWidth(), getOneCellHeight(), timeNow, g);
         }
         // /Отрисовка сетки
 
         // Отрисовка змеи
         for (ISnakeSegment segment : Game.getSnake().getSegments()) {
-            ISprite spr = Assets.getSnakeSegmentSprite(segment);
-            spr.drawSprite(
-                    segment.getX() * spr.getOneFrameWidth(),
-                    segment.getY() * spr.getOneFrameWidth(),
-                    timeNow, g
-            );
+            tmp = Assets.getSnakeSegmentSprite(segment);
+            tmpX = segment.getX() * getOneCellWidth();
+            tmpY = segment.getY() * getOneCellHeight();
+            tmp.drawSprite(tmpX, tmpY, getOneCellWidth(), getOneCellHeight(), timeNow, g);
         }
         // /Отрисовка змеи (земли)
 
@@ -93,32 +107,43 @@ public class Screen extends JPanel implements IScreen {
         IFood food = Game.getFood();
         if (food.getType() == IFood.Type.APPLE) {
             tmp = Assets.getApple();
-            tmp.drawSprite(
-                    food.getX() * tmp.getOneFrameWidth(),
-                    food.getY() * tmp.getOneFrameHeight(),
-                    timeNow, g
-            );
         } else {
             tmp = Assets.getCherry();
-            tmp.drawSprite(
-                    food.getX() * tmp.getOneFrameWidth(),
-                    food.getY() * tmp.getOneFrameHeight(),
-                    timeNow, g
-            );
         }
+        tmpX = food.getX() * getOneCellWidth();
+        tmpY = food.getY() * getOneCellHeight();
+        tmp.drawSprite(tmpX, tmpY, getOneCellWidth(), getOneCellHeight(), timeNow, g);
         // /Отрисовка еды
 
-        // Game over
-//        if (Main.isGameOver) {
-//            Assets.getGameOver().drawSprite(10, 100, timeNow, g);
-//        }
-        // /Game over
+        // Отрисовка счета
+        g.setColor(Color.blue);
+        g.drawString("Score: " + Game.getScore(), 10, 16);
+        // Отрисовка счета
     }
-    private void drawGamePause(Graphics g) {
-        drawGameOn(g);
+
+
+    private void drawGamePaused(Graphics g) {
+        drawGameRunning(g);
     }
     private void drawGameOver(Graphics g) {
-        Assets.getGameOver().drawSprite(10, 100, getTimeNow(), g);
+        drawSpriteInCenter(Assets.getGameOver(), g);
+
+//        Assets.getGameOver().drawSprite(10, 100, getTimeNow(), g);
+    }
+
+    private void drawSpriteInCenter(ISprite spr, Graphics g) {
+        int y = getScreenHeight() / 2 - spr.getOneFrameHeight() / 2;
+        int x = getScreenWidth() / 2 - spr.getOneFrameWidth() / 2;
+
+        spr.drawSprite(x, y, getTimeNow(), g);
+    }
+
+    private int getOneCellWidth() {
+        return SCREEN_WIDTH / Game.getDefaultColumnCount();
+    }
+
+    private int getOneCellHeight() {
+        return SCREEN_HEIGHT / Game.getDefaultRowCount();
     }
 
     @Override
@@ -129,5 +154,15 @@ public class Screen extends JPanel implements IScreen {
     @Override
     public State getState() {
         return state;
+    }
+
+    @Override
+    public int getScreenWidth() {
+        return SCREEN_WIDTH;
+    }
+
+    @Override
+    public int getScreenHeight() {
+        return SCREEN_HEIGHT;
     }
 }

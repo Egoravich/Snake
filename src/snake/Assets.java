@@ -41,12 +41,13 @@ public abstract class Assets {
     private static ISprite apple = new Sprite(spriteMap, 0, 128);
     private static ISprite cherry = new Sprite(spriteMap, 0, 160);
 
-    private static ISprite gameOver = new Sprite(spriteMap, 0, 192, 200, 32, 0, false, 1);
+    private static ISprite ground = new Sprite(spriteMap, 0, 192);
+    private static ISprite grassFew = new Sprite(spriteMap, 32, 192);
+    private static ISprite grassMedium = new Sprite(spriteMap, 64, 192);
+    private static ISprite grassHide = new Sprite(spriteMap, 96, 192);
 
-    private static ISprite ground = new Sprite(spriteMap, 0, 224);
-    private static ISprite grassFew = new Sprite(spriteMap, 32, 224);
-    private static ISprite grassMedium = new Sprite(spriteMap, 64, 224);
-    private static ISprite grassHide = new Sprite(spriteMap, 96, 224);
+    private static ISprite gameOver = new Sprite(spriteMap, 0, 224, 200, 32, 0, false, 1);
+    private static ISprite pressEnter = new Sprite(spriteMap, 0, 256, 256, 64, 0, false, 1);
 
     /**
      * По переданному сегменту змеи возвращает его спрайт.
@@ -144,5 +145,9 @@ public abstract class Assets {
 
     public static ISprite getGround() {
         return ground;
+    }
+
+    public static ISprite getPressEnter() {
+        return pressEnter;
     }
 }

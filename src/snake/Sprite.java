@@ -152,7 +152,12 @@ public class Sprite implements ISprite {
     }
 
     @Override
-    public void drawSprite(int posX, int posY, long timeNow, Graphics g) {
+    public void drawSprite(int x, int y, long timeNow, Graphics g) {
+        drawSprite(x, y, oneFrameWidth, oneFrameHeight, timeNow, g);
+    }
+
+    @Override
+    public void drawSprite(int x0, int y0, int w, int h, long timeNow, Graphics g) {
         if (lastUpdateTime == DEFAULT_LAST_UPDATE_TIME) {
             lastUpdateTime = timeNow;
         }
@@ -162,10 +167,10 @@ public class Sprite implements ISprite {
 
         g.drawImage(
                 spriteMap,
-                posX,
-                posY,
-                posX + oneFrameWidth,
-                posY + oneFrameHeight,
+                x0,
+                y0,
+                x0 + w,
+                y0 + h,
                 posOnMapX,
                 posOnMapY,
                 posOnMapX + oneFrameWidth,
@@ -221,7 +226,7 @@ public class Sprite implements ISprite {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        String LS = System.getProperty("line.separator");
+        final String LS = System.getProperty("line.separator");
 
         str.append("Sprite:");
         str.append(LS);

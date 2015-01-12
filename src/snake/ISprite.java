@@ -47,13 +47,16 @@ public interface ISprite {
     /**
      * Отрисовка текущего изображения спрайта в заданном контексте.
      *
-     * @param posX    Координата x левого верхнего угла спрайта.
-     * @param posY    Координата y левого верхнего угла спрайта.
+     * @param x    Координата x левого верхнего угла спрайта.
+     * @param y    Координата y левого верхнего угла спрайта.
      * @param g       Контекст в котором происходит отрисовка.
      * @param timeNow Текущее время. Служит для выбора конкретного изображения с карты спрайта.
      * @see ISprite#drawSprite(int, int, long)
      */
-    public void drawSprite(int posX, int posY, long timeNow, Graphics g);
+    public void drawSprite(int x, int y, long timeNow, Graphics g);
+
+    // TODO: Добавить описание
+    void drawSprite(int x0, int y0, int w, int h, long timeNow, Graphics g);
 
     /**
      * Отрисовка в контексте по умолчанию.

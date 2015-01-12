@@ -3,8 +3,8 @@ package snake;
 public interface IScreen {
     static enum State {
         MAIN_MENU,
-        GAME_ON,
-        GAME_PAUSE,
+        GAME_RUNNING,
+        GAME_PAUSED,
         GAME_OVER,
     }
 
@@ -12,4 +12,7 @@ public interface IScreen {
 
     public State getState();
     public void setState(State state);
+
+    public int getScreenWidth();
+    public int getScreenHeight();
 }
