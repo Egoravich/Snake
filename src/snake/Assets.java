@@ -2,18 +2,20 @@ package snake;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public abstract class Assets {
     private static final String SPR = System.getProperty("file.separator");
-    private static final String DIR = System.getProperty("user.dir") + SPR + "img" + SPR;
+    private static final String DIR = System.getProperty("user.dir");
+    private static final String SPRITE_MAP_PATH = SPR + "img" + SPR + "sprites.png";
+
     private static String spriteMapPath;
     private static BufferedImage spriteMap;
     static  {
-        spriteMapPath = DIR + "sprites.png";
-        try {
-            spriteMap = ImageIO.read(new File(spriteMapPath));
+        spriteMapPath = DIR + SPRITE_MAP_PATH;
+        try (FileInputStream imgFile = new FileInputStream(spriteMapPath)) {
+            spriteMap = ImageIO.read(imgFile);
         } catch (IOException e) {
             // TODO: --
             System.out.println("Can't read file " + spriteMapPath);
