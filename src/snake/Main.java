@@ -13,7 +13,6 @@ public class Main {
         JPanel panel = new JPanel();
         panel.setBackground(Color.black);
 
-
         panel.setLayout(new BorderLayout(0, 0));
         panel.add(canvas);
 
@@ -25,7 +24,6 @@ public class Main {
 
                 if (keyCode == 10 && Screen.getInstance().getState() == IScreen.State.MAIN_MENU) {
                     // Enter
-                    // TODO: Сделать правильно
                     Thread game = new Thread(new Runnable() {
                         public void run() {
                             Game.start(Screen.getInstance());
@@ -79,13 +77,5 @@ public class Main {
         win.pack();
         win.setVisible(true);
 
-//        try {
-//            Thread.sleep(1000);
-//            Game.start(Screen.getInstance());
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-//        Game.start(Screen.getInstance());
     }
 }
